@@ -1,13 +1,10 @@
 <template>
-  <div>日志</div>
+  <div class="log"></div>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style>
-
 </style>

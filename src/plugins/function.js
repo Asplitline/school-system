@@ -12,7 +12,7 @@ export function bindImg (url) {
   // }
 }
 // 转换URL
-Vue.prototype.toURL = function (obj) {
+export function toURL (obj) {
   const arr = []
   for (const key in obj) {
     arr.push(key + '=' + obj[key])
@@ -82,4 +82,11 @@ export function checkPhone (rule, value, callback) {
   const regPhone = /^1[34578]\d{9}$/
   if (regPhone.test(value)) return callback()
   callback(new Error('手机号码不合法'))
+}
+
+// 根据id查询用户名
+export function findUserById (id, array) {
+  return array.find((item) => {
+    return item.id === id
+  })
 }
