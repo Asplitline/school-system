@@ -1,6 +1,6 @@
 import Vue from 'vue'
 // 绑定服务器端地址
-export function bindUrl (url) {
+export function bindURL (url) {
   // Vue.prototype.bindUrl = function (url) {
   return 'http://127.0.0.1:8088/' + url
   // }

@@ -23,7 +23,8 @@ import {
   Dialog,
   Radio,
   Upload,
-  MessageBox
+  MessageBox,
+  Submenu
 } from 'element-ui'
 
 Vue.use(Button)
@@ -48,6 +49,7 @@ Vue.use(Tag)
 Vue.use(Dialog)
 Vue.use(Radio)
 Vue.use(Upload)
+Vue.use(Submenu)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

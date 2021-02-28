@@ -18,7 +18,7 @@
             >
             <el-submenu class="user-info" index="1" v-if="currentUser">
               <template slot="title">
-                <img :src="bindUrl(currentUser.imgUrl)" class="avatar" />
+                <img :src="bindURL(currentUser.imgUrl)" class="avatar" />
                 <span>{{ currentUser.username }}</span>
               </template>
               <el-menu-item @click="logout"
@@ -82,17 +82,25 @@
 </template>
 
 <script>
+import { bindURL } from '@/plugins/function'
 export default {
   data() {
     return {
-      currentUser: '',
+      currentUser: JSON.parse(sessionStorage.getItem('userInfo')),
       activePath: sessionStorage.getItem('currentIndexA'),
       isCollapse: false
     }
   },
   methods: {
+    bindURL,
+    //
     toToggleMenu() {
       this.isCollapse = !this.isCollapse
+    },
+    // 登出
+    logout() {
+      this.$router.push('/')
+      sessionStorage.clear()
     }
   },
   created() {}

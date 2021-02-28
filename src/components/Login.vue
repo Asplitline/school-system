@@ -34,7 +34,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { checkLogin } from '@api'
-
+import { toURL } from '@/plugins/function'
 const ERR_OK = true
 export default {
   data() {
@@ -60,7 +60,7 @@ export default {
     submitForm() {
       this.$refs.loginForm.validate(async (valid) => {
         if (!valid) return
-        const pwdURL = this.toURL(this.loginForm)
+        const pwdURL = toURL(this.loginForm)
         const { success, data } = await checkLogin(pwdURL)
         if (success === ERR_OK) {
           this.$message.success('登录成功')

@@ -10,6 +10,8 @@ const addUser = _post('/account/insert')
 const editUser = _put('/account/updateIgnoreNull')
 const resetPassword = _get('/account/changePassword')
 const deleteUser = _delete('/account/delete')
+// --advice
+const getAdviceList = _get('/')
 // --post
 const getPostList = _get('/post/api/pagePosts')
 const deletePost = _delete('/post/api/deletePost')

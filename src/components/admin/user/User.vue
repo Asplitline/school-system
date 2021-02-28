@@ -164,7 +164,7 @@
           >
             <img
               v-if="addUserForm.imgUrl"
-              :src="bindUrl(addUserForm.imgUrl)"
+              :src="bindURL(addUserForm.imgUrl)"
               class="avatar"
               ref="preview"
             />
@@ -242,7 +242,7 @@
           >
             <img
               v-if="editUserForm.avatarImgUrl"
-              :src="bindUrl(editUserForm.avatarImgUrl)"
+              :src="bindURL(editUserForm.avatarImgUrl)"
               class="avatar"
               ref="preview"
             />
@@ -286,7 +286,7 @@ import {
 import {
   checkEmail,
   checkPhone,
-  bindUrl,
+  bindURL,
   bindImg,
   convertDeepCopy
 } from '@/plugins/function'
@@ -337,7 +337,7 @@ export default {
     }
   },
   methods: {
-    bindUrl,
+    bindURL,
     bindImg,
     // 单页数据量
     handleSizeChange(size) {
