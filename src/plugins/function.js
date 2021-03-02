@@ -19,7 +19,7 @@ export function toURL (obj) {
   }
   return arr.join('&')
 }
-// 建议深拷贝
+// 深拷贝
 export function convertDeepCopy (data) {
   return JSON.parse(JSON.stringify(data))
 }
@@ -86,6 +86,12 @@ export function checkPhone (rule, value, callback) {
 
 // 根据id查询用户名
 export function findUserById (id, array) {
+  return array.find((item) => {
+    return item.id === id
+  })
+}
+// 根据id查询文章
+export function findPostById (id, array) {
   return array.find((item) => {
     return item.id === id
   })

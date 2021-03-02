@@ -42,17 +42,28 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="query.page"
+      :page-sizes="[1, 2, 5, 10]"
+      :page-size="query.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
   </div>
 </template>
 
 <script>
-import { getCommentList, getUserList, deleteComment } from '@api'
-import { findUserById } from '@/plugins/function'
+import { getCommentList, getUser, getPost, deleteComment } from '@api'
+import { findUserById, findPostById } from '@/plugins/function'
 export default {
   data() {
     return {
       commentList: [{}],
-      userList: [],
+      allUser: [],
+      allPost: [],
       query: {
         pageNum: 1, // 当前页
         pageSize: 10, // 最大页数
@@ -69,8 +80,10 @@ export default {
       )
       this.commentList = list
       this.commentList.forEach((item) => {
-        const user = findUserById(item.userId, this.userList)
+        const user = findUserById(item.userId, this.allUser)
+        const post = findPostById(item.postId, this.allPost)
         item.user = user && user.name
+        item.title = post && post.title
       })
       this.total = total
     },
@@ -94,17 +107,23 @@ export default {
         .catch(() => {
           this.$message.info('已取消')
         })
+    },
+    // 最大页
+    handleSizeChange(size) {
+      this.query.pageSize = size
+      this.query.pageNum = 1
+      this.getComments()
+    },
+    // 当前页
+    handleCurrentChange(currentIndex) {
+      this.query.pageNum = currentIndex
+      this.getComments()
     }
   },
-  created() {
-    this.getComments()
-    getUserList()
-      .then((res) => {
-        this.userList = res
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  async created() {
+    this.allUser = await getUser()
+    this.allPost = await getPost()
+    await this.getComments()
   }
 }
 </script>

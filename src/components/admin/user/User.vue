@@ -276,7 +276,7 @@
 
 <script>
 import {
-  getUser,
+  getUserList,
   addUser,
   editUser,
   resetPassword as resetPwd,
@@ -352,7 +352,7 @@ export default {
     },
     // 获取用户列表
     async getUsers() {
-      const { list, total } = await getUser(this.query)
+      const { list, total } = await getUserList(this.query)
       this.total = total
       this.userList = list
     },

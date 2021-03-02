@@ -49,3 +49,14 @@ export function _delete (url) {
             })
     }
 }
+
+export function _deleteOld (url) {
+    return function (params) {
+        return $http.delete(`${url}?id=${params}`)
+            .then(res => {
+                return res.data
+            }).catch(err => {
+                console.log(err);
+            })
+    }
+}

@@ -60,7 +60,7 @@
   transform: translate(-50%, -50%);
   font-size: 20px;
 }
-.iconfont {
+.el-form .iconfont {
   margin-right: 2px;
   vertical-align: bottom;
 }

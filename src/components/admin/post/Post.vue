@@ -88,13 +88,13 @@
 </template>
 
 <script>
-import { getPostList, getUserList, deletePost } from '@api'
+import { getPostList, getUser, deletePost } from '@api'
 import { findUserById } from '@/plugins/function'
 export default {
   data() {
     return {
       postList: [{}],
-      userList: [],
+      allUser: [],
       query: {
         page: 1, // 当前页
         size: 10, // 最大页数
@@ -111,7 +111,7 @@ export default {
       const { list, total } = await getPostList(this.query)
       this.postList = list
       this.postList.forEach((item) => {
-        const user = findUserById(item.authorId, this.userList)
+        const user = findUserById(item.authorId, this.allUser)
         item.author = user && user.name
       })
       this.total = total
@@ -151,9 +151,9 @@ export default {
   },
   created() {
     this.getPosts()
-    getUserList()
+    getUser()
       .then((res) => {
-        this.userList = res
+        this.allUser = res
       })
       .catch((err) => {
         console.log(err)

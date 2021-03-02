@@ -11,6 +11,12 @@ import '@/plugins/function'
 // icon
 import '@/assets/fonts/iconfont.css'
 Vue.config.productionTip = false
+// quill
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 
 new Vue({
   router,

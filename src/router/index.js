@@ -14,33 +14,35 @@ const Donate = () => import(/* webpackChunkName: "admin_donate" */ '@/components
 const Log = () => import(/* webpackChunkName: "admin_log" */ '@/components/admin/log/Log.vue')
 const News = () => import(/* webpackChunkName: "admin_news" */ '@/components/admin/news/News.vue')
 const Post = () => import(/* webpackChunkName: "admin_post" */ '@/components/admin/post/Post.vue')
+const HandlePost = () => import(/* webpackChunkName: "admin_post" */ '@/components/admin/post/HandlePost.vue')
 const User = () => import(/* webpackChunkName: "admin_user" */ '@/components/admin/user/User.vue')
 
 Vue.use(VueRouter)
-const routes =
-  [
-    { path: '/', name: 'home', component: Home },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: Admin,
-      redirect: '/_user',
-      children: [
-        { path: '/_user', component: User },
-        { path: '/_advice', component: Advice },
-        { path: '/_comment', component: Comment },
-        { path: '/_donate', component: Donate },
-        { path: '/_log', component: Log },
-        { path: '/_news', component: News },
-        { path: '/_post', component: Post }
-      ],
-      beforeEnter: (to, from, next) => {
-        if (sessionStorage.getItem('userInfo')) next()
-        else next('/login')
-      }
-    },
-    { path: '/login', name: 'login', component: Login }
-  ]
+const routes = [
+  { path: '/', name: 'home', component: Home },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
+    redirect: '/_user',
+    children: [
+      { path: '/_user', component: User },
+      { path: '/_advice', component: Advice },
+      { path: '/_comment', component: Comment },
+      { path: '/_donate', component: Donate },
+      { path: '/_log', component: Log },
+      { path: '/_news', component: News },
+      { path: '/_post', component: Post },
+      { path: '/_hPost', component: HandlePost },
+      { path: '/_hPost/:id', component: HandlePost, props: true }
+    ],
+    beforeEnter: (to, from, next) => {
+      if (sessionStorage.getItem('userInfo')) next()
+      else next('/login')
+    }
+  },
+  { path: '/login', name: 'login', component: Login }
+]
 
 const router = new VueRouter({
   routes
