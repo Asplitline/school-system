@@ -27,6 +27,14 @@ export function _post (url) {
         }).catch((err) => { console.log(err) })
     }
 }
+export function _postOld (url) {
+    return function (params) {
+        return $http.post(`${url}?postId=${params}`
+        ).then(res => {
+            return res.data
+        }).catch((err) => { console.log(err) })
+    }
+}
 // put 
 export function _put (url) {
     return function (params) {

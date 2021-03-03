@@ -5,6 +5,14 @@ import VueRouter from 'vue-router'
 const Login = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Login.vue')
 // home
 const Home = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Home.vue')
+const hIndex = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/index/Index.vue')
+const hPost = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/Post.vue')
+const hAddPost = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/AddPost.vue')
+const hPostDetail = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/PostDetail.vue')
+const hAdvice = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/advice/Advice.vue')
+const hDonate = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/donate/Donate.vue')
+const hNews = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/news/News.vue')
+const hUser = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/user/User.vue')
 
 // admin
 const Admin = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Admin.vue')
@@ -19,7 +27,21 @@ const User = () => import(/* webpackChunkName: "admin_user" */ '@/components/adm
 
 Vue.use(VueRouter)
 const routes = [
-  { path: '/', name: 'home', component: Home },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+    children: [
+      { path: '/index', component: hIndex },
+      { path: '/post', component: hPost },
+      { path: '/post/:id', component: hPostDetail, props: true },
+      { path: '/addPost', component: hAddPost },
+      { path: '/advice', component: hAdvice },
+      { path: '/donate', component: hDonate },
+      { path: '/news', component: hNews },
+      { path: '/user', component: hUser }
+    ]
+  },
   {
     path: '/admin',
     name: 'admin',
@@ -58,6 +80,13 @@ router.beforeEach((to, from, next) => {
     case '/_news':
     case '/_post':
       sessionStorage.setItem('currentIndexA', to.path)
+      break
+    case '/index':
+    case '/post':
+    case '/advice':
+    case '/donate':
+    case '/news':
+      sessionStorage.setItem('currentIndexH', to.path)
       break
   }
   next()

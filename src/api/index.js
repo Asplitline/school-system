@@ -1,4 +1,4 @@
-import { _get, _post, _put, _delete, _deleteOld } from './helpers'
+import { _get, _post, _postOld, _put, _delete, _deleteOld } from './helpers'
 
 // login
 const checkLogin = _post('/account/api/login')
@@ -24,10 +24,16 @@ const editNews = _put('/news/updateIgnoreNull')
 // --post
 const getPost = _get('/post/getAllPosts')
 const getPostList = _get('/post/api/pagePosts')
+const addPost = _post('/post/api/addPost')
 const deletePost = _delete('/post/api/deletePost')
 // --comment
 const getCommentList = _get('/comment/api/pageComment')
+const getCommentById = _postOld('/reply/api/getCommentsByPostId')
+const addComment = _post('/reply/api/addComment')
+// ---reply
 const deleteComment = _delete('/comment/api/deleteComment')
+const addReply = _post('/reply/api/addReply')
+const getReply = _get('/reply/getReplysByCommentId')
 // --log
 const getLogList = _get('/logs/pageLogs')
 const deleteLog = _deleteOld('/logs/delete')
@@ -57,10 +63,16 @@ export {
     // post
     getPost,
     getPostList,
+    addPost,
     deletePost,
     // comment
     getCommentList,
+    getCommentById,
+    addComment,
     deleteComment,
+    // reply
+    addReply,
+    getReply,
     // log
     getLogList,
     deleteLog
