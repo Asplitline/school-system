@@ -26,7 +26,8 @@ import {
   MessageBox,
   Submenu,
   Drawer,
-  Card
+  Card,
+  Avatar
 } from 'element-ui'
 
 Vue.use(Button)
@@ -54,6 +55,7 @@ Vue.use(Upload)
 Vue.use(Submenu)
 Vue.use(Drawer)
 Vue.use(Card)
+Vue.use(Avatar)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

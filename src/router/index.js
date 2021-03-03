@@ -13,8 +13,8 @@ const Comment = () => import(/* webpackChunkName: "admin_comment" */ '@/componen
 const Donate = () => import(/* webpackChunkName: "admin_donate" */ '@/components/admin/donate/Donate.vue')
 const Log = () => import(/* webpackChunkName: "admin_log" */ '@/components/admin/log/Log.vue')
 const News = () => import(/* webpackChunkName: "admin_news" */ '@/components/admin/news/News.vue')
+const HandleNews = () => import(/* webpackChunkName: "admin_news" */ '@/components/admin/news/HandleNews.vue')
 const Post = () => import(/* webpackChunkName: "admin_post" */ '@/components/admin/post/Post.vue')
-const HandlePost = () => import(/* webpackChunkName: "admin_post" */ '@/components/admin/post/HandlePost.vue')
 const User = () => import(/* webpackChunkName: "admin_user" */ '@/components/admin/user/User.vue')
 
 Vue.use(VueRouter)
@@ -32,9 +32,9 @@ const routes = [
       { path: '/_donate', component: Donate },
       { path: '/_log', component: Log },
       { path: '/_news', component: News },
-      { path: '/_post', component: Post },
-      { path: '/_hPost', component: HandlePost },
-      { path: '/_hPost/:id', component: HandlePost, props: true }
+      { path: '/_hNews', component: HandleNews },
+      { path: '/_hNews/:id', component: HandleNews, props: true },
+      { path: '/_post', component: Post }
     ],
     beforeEnter: (to, from, next) => {
       if (sessionStorage.getItem('userInfo')) next()

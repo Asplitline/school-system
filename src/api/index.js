@@ -20,6 +20,7 @@ const deleteDonate = _deleteOld('/donate/delete')
 const getNewsList = _get('/news/pageNews')
 const deleteNews = _deleteOld('/news/delete')
 const addNews = _post('/news/insert')
+const editNews = _put('/news/updateIgnoreNull')
 // --post
 const getPost = _get('/post/getAllPosts')
 const getPostList = _get('/post/api/pagePosts')
@@ -52,6 +53,7 @@ export {
     getNewsList,
     deleteNews,
     addNews,
+    editNews,
     // post
     getPost,
     getPostList,

@@ -28,33 +28,37 @@
         </el-input>
       </el-col>
       <el-col :span="4">
-        <el-button type="success" size="small" @click="goPostDetail()" plain>
+        <el-button type="success" size="small" @click="goPostDetail(0)" plain>
           发布新闻</el-button
         >
       </el-col>
     </el-row>
     <!-- 新闻表格  -->
     <el-table :data="newsList" stripe style="width: 100%" max-height="560">
-      <el-table-column prop="title" label="标题" min-width="100">
-      </el-table-column>
-      <el-table-column prop="content" label="内容" min-width="140">
+      <el-table-column prop="url" label="封面" min-width="60">
         <template v-slot="{ row }">
-          <div v-html="row.content"></div>
+          <el-avatar
+            :size="60"
+            :src="bindImg(row.url)"
+            shape="square"
+          ></el-avatar>
         </template>
+      </el-table-column>
+      <el-table-column prop="title" label="标题" min-width="100">
       </el-table-column>
       <el-table-column prop="name" label="作者" min-width="80">
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" min-width="80">
+      <el-table-column prop="createTime" label="创建时间" min-width="120">
         <template v-slot="{ row }">
           {{ row.createTime | formatDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" min-width="80">
+      <el-table-column prop="updateTime" label="更新时间" min-width="120">
         <template v-slot="{ row }">
           {{ row.updateTime | formatDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="state" label="状态" min-width="80">
+      <el-table-column prop="state" label="状态" min-width="120">
         <template v-slot="{ row }">
           <el-tag v-if="row.state === 0" type="danger">未发表</el-tag>
           <el-tag v-else>已发表</el-tag>
@@ -73,6 +77,7 @@
               type="warning"
               icon="el-icon-tickets"
               size="small"
+              @click="showNewsDialog(row)"
             ></el-button>
           </el-tooltip>
           <el-tooltip
@@ -86,6 +91,7 @@
               type="primary"
               icon="el-icon-edit"
               size="small"
+              @click="goPostDetail(1, row)"
             ></el-button>
           </el-tooltip>
           <el-tooltip
@@ -115,12 +121,69 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     ></el-pagination>
+    <!-- 新闻审核 -->
+    <el-dialog :visible.sync="isVerifyDialog" width="34%">
+      <div class="content">
+        <p class="brief">
+          新闻封面:
+          <span>
+            <img
+              :src="bindURL(currentForm.url)"
+              alt=""
+              width="100"
+              height="100"
+            />
+          </span>
+        </p>
+        <p>
+          新闻标题:<span>{{ currentForm.title }}</span>
+        </p>
+        <p>新闻内容:<span class="mark" v-html="currentForm.content"></span></p>
+        <p>
+          新闻时间:<span>{{ currentForm.createTime | formatDate }}</span>
+        </p>
+        <p>
+          更新时间:<span>{{ currentForm.updateTime | formatDate }}</span>
+        </p>
+        <p>
+          新闻状态:<span>
+            <el-radio
+              v-model="currentForm.state"
+              :label="0"
+              :disabled="currentForm.state === 1"
+              >未发表</el-radio
+            >
+            <el-radio v-model="currentForm.state" :label="1"
+              >已发表</el-radio
+            ></span
+          >
+        </p>
+        <p></p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isVerifyDialog = false" size="small"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="submitVerify()" size="small"
+          >提 交</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getNewsList, deleteNews, getUser } from '@api'
-import { findUserById } from '@/plugins/function'
+import { getNewsList, deleteNews, getUser, editNews } from '@api'
+import {
+  findUserById,
+  bindImg,
+  bindURL,
+  convertDeepCopy
+} from '@/plugins/function'
+import { mapMutations } from 'vuex'
+const ADD = 0
+const EDIT = 1
+
 export default {
   data() {
     return {
@@ -132,17 +195,21 @@ export default {
         keyword: null
       },
       total: 10,
-      isAddNewsDrawer: false
+      isAddNewsDrawer: false,
+      isVerifyDialog: false,
+      currentForm: {}
     }
   },
   methods: {
+    ...mapMutations(['initCurrentNews']),
+    bindImg,
+    bindURL,
     // 获取新闻
     async getNews() {
       const { list, total } = await getNewsList(this.query)
       this.newsList = list
       this.newsList.forEach((item) => {
         const news = findUserById(Number(item.author), this.user)
-        // console.log(item.author, news)
         item.name = news && news.name
       })
       // console.log(this.newsList)
@@ -169,10 +236,33 @@ export default {
           this.$message.info('已取消')
         })
     },
-    // 跳转到文章详情
-    goPostDetail() {
-      // this.$router.push('/_hPost')
-      this.$router.push(`/_hPost/1`)
+    // 跳转到文章
+    goPostDetail(flag, row) {
+      switch (flag) {
+        case ADD:
+          this.$router.push('/_hNews')
+          break
+        case EDIT:
+          this.initCurrentNews(row)
+          this.$router.push(`/_hNews/${row.id}`)
+          break
+      }
+    },
+    // 显示审核对话框
+    showNewsDialog(row) {
+      this.isVerifyDialog = true
+      this.currentForm = convertDeepCopy(row)
+    },
+    // 提交审核
+    async submitVerify() {
+      const { success } = await editNews(this.currentForm)
+      if (success) {
+        this.$message.success('修改成功')
+        this.getNews()
+        this.isVerifyDialog = false
+      } else {
+        this.$message.error('修改失败')
+      }
     },
     // 最大页
     handleSizeChange(size) {
@@ -201,4 +291,29 @@ export default {
 
 <style lang="less" scoped>
 @import '~@/assets/css/common.css';
+.content {
+  letter-spacing: 2px;
+  p {
+    line-height: 26px;
+    color: #000;
+    margin-bottom: 4px;
+    span {
+      display: block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 20px;
+      box-sizing: border-box;
+      color: #666;
+    }
+    span img {
+      vertical-align: top;
+    }
+  }
+  .brief > span {
+    border-color: transparent;
+  }
+  .mark {
+    background-color: #f3f3f3;
+  }
+}
 </style>
