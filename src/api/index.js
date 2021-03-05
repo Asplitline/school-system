@@ -15,6 +15,7 @@ const getAdviceList = _get('/addvice/pageAddvice')
 const deleteAdvice = _deleteOld('/addvice/delete')
 // --donate
 const getDonateList = _get('/donate/pageDonate')
+const addDonate = _post('/donate/insert')
 const deleteDonate = _deleteOld('/donate/delete')
 // --news
 const getNewsList = _get('/news/pageNews')
@@ -38,7 +39,10 @@ const getReply = _get('/reply/getReplysByCommentId')
 const getLogList = _get('/logs/pageLogs')
 const deleteLog = _deleteOld('/logs/delete')
 // home
-// --
+// --advice
+const addAdvice = _post('/addvice/insert')
+const editAdvice = _put('/addvice/updateIgnoreNull')
+
 export {
     // login
     checkLogin,
@@ -55,6 +59,7 @@ export {
     //  donate
     getDonateList,
     deleteDonate,
+    addDonate,
     // news
     getNewsList,
     deleteNews,
@@ -75,5 +80,8 @@ export {
     getReply,
     // log
     getLogList,
-    deleteLog
+    deleteLog,
+    // advice
+    addAdvice,
+    editAdvice
 }

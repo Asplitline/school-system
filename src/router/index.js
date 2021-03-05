@@ -5,14 +5,15 @@ import VueRouter from 'vue-router'
 const Login = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Login.vue')
 // home
 const Home = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Home.vue')
-const hIndex = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/index/Index.vue')
-const hPost = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/Post.vue')
-const hAddPost = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/AddPost.vue')
-const hPostDetail = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/post/PostDetail.vue')
-const hAdvice = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/advice/Advice.vue')
-const hDonate = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/donate/Donate.vue')
-const hNews = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/news/News.vue')
-const hUser = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/home/user/User.vue')
+const hIndex = () => import(/* webpackChunkName: "home_index" */ '@/components/home/index/Index.vue')
+const hPost = () => import(/* webpackChunkName: "home_post" */ '@/components/home/post/Post.vue')
+const hAddPost = () => import(/* webpackChunkName: "home_post" */ '@/components/home/post/AddPost.vue')
+const hPostDetail = () => import(/* webpackChunkName: "home_post" */ '@/components/home/post/PostDetail.vue')
+const hAdvice = () => import(/* webpackChunkName: "home_advice" */ '@/components/home/advice/Advice.vue')
+const hDonate = () => import(/* webpackChunkName: "home_donate" */ '@/components/home/donate/Donate.vue')
+const hNews = () => import(/* webpackChunkName: "home_news" */ '@/components/home/news/News.vue')
+const hNewsDetail = () => import(/* webpackChunkName: "home_news" */ '@/components/home/news/NewsDetail.vue')
+const hUser = () => import(/* webpackChunkName: "home_user" */ '@/components/home/user/User.vue')
 
 // admin
 const Admin = () => import(/* webpackChunkName: "login_home_admin" */ '@/components/Admin.vue')
@@ -39,6 +40,7 @@ const routes = [
       { path: '/advice', component: hAdvice },
       { path: '/donate', component: hDonate },
       { path: '/news', component: hNews },
+      { path: '/news/:id', component: hNewsDetail, props: true },
       { path: '/user', component: hUser }
     ]
   },

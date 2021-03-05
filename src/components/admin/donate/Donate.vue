@@ -20,8 +20,6 @@
       </el-table-column>
       <el-table-column prop="classes" label="所在班级" min-width="100">
       </el-table-column>
-      <el-table-column prop="company" label="所在公司信息" min-width="100">
-      </el-table-column>
       <el-table-column prop="state" label="状态" min-width="100">
         <template v-slot="{ row }">
           <el-tag v-if="row.state === 0" type="warning">审核中 </el-tag>

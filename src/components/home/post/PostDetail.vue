@@ -70,8 +70,13 @@
                       href="javascript:;"
                       class="actions"
                       @click="showTextarea(item.id)"
+                      v-if="loginStatus === true"
                       >回复</a
                     >
+                    <p v-else>
+                      请在<a href="javascript:;" class="actions">登录</a
+                      >后进行回复
+                    </p>
                     <transition name="fade">
                       <div class="replyArea" v-show="currentIndex === item.id">
                         <el-input
@@ -128,7 +133,7 @@
               </div>
             </div>
           </div>
-          <div class="commentArea">
+          <div class="commentArea" v-if="loginStatus === true">
             <el-input
               type="textarea"
               :rows="4"
@@ -158,6 +163,7 @@
               </div>
             </transition>
           </div>
+          <div v-else>请先<a href="javascript">登录</a>后进行评论</div>
         </el-main>
       </el-container>
     </el-card>
@@ -176,6 +182,7 @@ export default {
       currentAuthor: {},
       currentComment: {},
       currentIndex: '',
+      currentUser: {},
       isShowBtns: false,
       comment: [],
       commentForm: {
@@ -257,12 +264,12 @@ export default {
         this.$message.error('内容不能为空')
         return
       }
-      const currentUser = this.$store.state.user
+      // const currentUser = this.$store.state.user
       Object.assign(this.replyForm, {
         content,
         postId: this.id,
         commentId: id,
-        userId: currentUser.id,
+        userId: this.currentUser.id,
         atuserId: this.currentAuthor.id
       })
       const { success } = await addReply(this.replyForm)
@@ -276,13 +283,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentPost']),
+    ...mapState(['currentPost', 'loginStatus']),
     commentNum() {
       return this.currentComment.length
     }
   },
   async created() {
     this.user = await getUser()
+    this.currentUser = this.$store.state.user
     this.initAuthor()
     this.getComment()
   }

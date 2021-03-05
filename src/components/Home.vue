@@ -34,7 +34,10 @@
             ><i class="icon-user iconfont"></i>个人中心</el-menu-item
           > -->
           <div class="login">
-            <a href="javascript:;" v-if="isLogin" @click="showLoginDialog"
+            <a
+              href="javascript:;"
+              v-if="loginStatus === false"
+              @click="showLoginDialog()"
               >登录</a
             >
             <a href="javascript:;" v-else @click="logOut">注销</a>
@@ -51,23 +54,101 @@
         <p class="copy-right">© 2020 NSU All Rights Reserved</p>
       </el-footer>
     </el-container>
+    <!-- 登录对话框 -->
+    <el-dialog
+      :visible.sync="isLoginDialog"
+      width="20%"
+      class="loginDialog"
+      :close-on-click-modal="false"
+      @close="clearDialog('loginForm')"
+    >
+      <el-form
+        :model="loginForm"
+        :rules="loginRules"
+        ref="loginForm"
+        size="small"
+      >
+        <h4 content-position="left" class="title">登录界面</h4>
+        <el-form-item prop="username">
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="el-icon-user"
+            placeholder="输入用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="loginForm.password"
+            type="password"
+            prefix-icon="el-icon-lock"
+            placeholder="输入密码"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isLoginDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="submitLogin('loginForm')" size="mini"
+          >登 录</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { checkLogin } from '@api'
+import { toURL } from '@/plugins/function'
+import { mapMutations, mapState } from 'vuex'
 export default {
   data() {
     return {
       isIndex: false,
       activeIndex: sessionStorage.getItem('currentIndexH'),
-      isLogin: false
+      isLogin: this.$store.state.loginStatus,
+      loginForm: {},
+      loginRules: {
+        username: [
+          { required: true, message: '请输入用户账号', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入用户密码', trigger: 'blur' }
+        ]
+      },
+      isLoginDialog: false
     }
   },
   methods: {
+    ...mapMutations(['initUser', 'initLoginStatus']),
+    // 显示登录对话框
     showLoginDialog() {
-      // this.is
+      this.isLoginDialog = true
     },
-    logOut() {}
+    // 注销
+    logOut() {
+      sessionStorage.clear()
+      this.initUser(null)
+      this.initLoginStatus(false)
+    },
+    // 提交登录
+    submitLogin(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (!valid) return
+        const { success, data } = await checkLogin(toURL(this.loginForm))
+        if (success) {
+          this.$message.success('登录成功')
+          this.isLoginDialog = false
+          this.initUser(data)
+          this.initLoginStatus(true)
+        } else this.$message.error('登录失败')
+      })
+    },
+    // 清空对话框
+    clearDialog(formName) {
+      this.$refs[formName].resetFields()
+    }
+  },
+  computed: {
+    ...mapState(['loginStatus'])
   }
 }
 </script>
@@ -151,7 +232,6 @@ export default {
     flex: 1;
     // width: 100%;
   }
-
   // 页尾
   .footer {
     background-image: linear-gradient(to bottom, #333, #222);
@@ -163,6 +243,10 @@ export default {
         color: #ddd;
       }
     }
+  }
+  // 登录对话框
+  /deep/.el-dialog__body {
+    padding: 10px 20px;
   }
 }
 </style>

@@ -1,11 +1,5 @@
 <template>
   <div class="post">
-    <!-- <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>帖子中心</el-breadcrumb-item>
-    </el-breadcrumb>
-    <el-divider></el-divider> -->
-
     <el-container>
       <el-main>
         <!-- 顶部导航 -->
@@ -35,7 +29,7 @@
             class="addpost"
             size="mini"
             plain
-            @click="goPostSubmit"
+            @click="goPostSubmit()"
             ><i class="el-icon-edit-outline"></i>我要发布</el-button
           >
           <ul>
@@ -79,7 +73,7 @@
 
 <script>
 import { getPostList, getUser } from '@api'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { findUserById } from '@/plugins/function'
 export default {
   data() {
@@ -114,6 +108,10 @@ export default {
     },
     // 添加文章
     goPostSubmit() {
+      if (this.loginStatus === false) {
+        this.$message.error('请先登录')
+        return
+      }
       this.$router.push('/addPost')
     },
     // 当前页
@@ -121,6 +119,9 @@ export default {
       this.query.page = currentIndex
       this.getPost()
     }
+  },
+  computed: {
+    ...mapState(['loginStatus'])
   },
   created() {
     this.getPost()
