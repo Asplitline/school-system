@@ -32,6 +32,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    redirect: '/index',
     children: [
       { path: '/index', component: hIndex },
       { path: '/post', component: hPost },
@@ -61,8 +62,10 @@ const routes = [
       { path: '/_post', component: Post }
     ],
     beforeEnter: (to, from, next) => {
-      if (sessionStorage.getItem('userInfo')) next()
-      else next('/login')
+      const user = sessionStorage.getItem('userInfo')
+      if (user && user !== 'null') {
+        next()
+      } else { next('/login') }
     }
   },
   { path: '/login', name: 'login', component: Login }
@@ -88,6 +91,7 @@ router.beforeEach((to, from, next) => {
     case '/advice':
     case '/donate':
     case '/news':
+    case '/user':
       sessionStorage.setItem('currentIndexH', to.path)
       break
   }

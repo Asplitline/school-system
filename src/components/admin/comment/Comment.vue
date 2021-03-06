@@ -12,9 +12,9 @@
     </el-breadcrumb>
     <!-- 评论表格 -->
     <el-table :data="commentList" stripe style="width: 100%" max-height="560">
-      <el-table-column prop="title" label="文章名" min-width="200">
+      <el-table-column prop="title" label="文章名" min-width="100">
       </el-table-column>
-      <el-table-column prop="content" label="内容" min-width="80">
+      <el-table-column prop="content" label="内容" min-width="150">
       </el-table-column>
       <el-table-column prop="user" label="作者" min-width="100">
       </el-table-column>

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :class="{ indexS: isIndex }">
     <el-container>
       <!-- 头部导航 -->
       <el-header v-show="!isIndex">
@@ -30,9 +30,9 @@
           <el-menu-item index="/news"
             ><i class="icon-news iconfont"></i>新闻中心</el-menu-item
           >
-          <!-- <el-menu-item index="/info"
+          <el-menu-item index="/user" v-show="loginStatus"
             ><i class="icon-user iconfont"></i>个人中心</el-menu-item
-          > -->
+          >
           <div class="login">
             <a
               href="javascript:;"
@@ -51,7 +51,7 @@
       <!-- 页脚 -->
       <el-footer class="footer" style="height: 90px">
         <p class="call-me"><a href="">关于我们</a>|<a href="">联系我们</a></p>
-        <p class="copy-right">© 2020 NSU All Rights Reserved</p>
+        <p class="copy-right">© 2021 MY All Rights Reserved</p>
       </el-footer>
     </el-container>
     <!-- 登录对话框 -->
@@ -149,11 +149,17 @@ export default {
   },
   computed: {
     ...mapState(['loginStatus'])
+  },
+  updated() {
+    this.isIndex = sessionStorage.getItem('currentIndexH') === '/index'
+    this.activeIndex = sessionStorage.getItem('currentIndexH')
+  },
+  created() {
+    this.activeIndex = sessionStorage.getItem('currentIndexH')
+    this.isIndex = sessionStorage.getItem('currentIndexH') === '/index'
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 .home {
   // Sticky -footer
@@ -230,7 +236,6 @@ export default {
   // 内容区域
   .content {
     flex: 1;
-    // width: 100%;
   }
   // 页尾
   .footer {
@@ -247,6 +252,13 @@ export default {
   // 登录对话框
   /deep/.el-dialog__body {
     padding: 10px 20px;
+  }
+}
+
+.indexS {
+  background-image: linear-gradient(to top right, #2d3436, #636e72);
+  .footer {
+    background-image: none;
   }
 }
 </style>

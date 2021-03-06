@@ -38,7 +38,7 @@
         <el-table :data="adviceTable" style="width: 100%">
           <el-table-column prop="title" label="投诉标题" min-width="100">
           </el-table-column>
-          <el-table-column prop="description" label="投诉内容" min-width="100">
+          <el-table-column prop="description" label="投诉内容" min-width="200">
           </el-table-column>
           <el-table-column prop="createTime" label="投诉时间" min-width="100">
             <template v-slot="{ row }">
@@ -165,7 +165,7 @@
 
 <script>
 import { bindImg, bindURL, convertDeepCopy } from '@/plugins/function'
-import { getAdviceList, addAdvice, editAdvice } from '@api'
+import { getAdviceList, addAdvice } from '@api'
 import { mapState } from 'vuex'
 export default {
   data() {

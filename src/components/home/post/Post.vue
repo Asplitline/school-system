@@ -1,73 +1,70 @@
 <template>
   <div class="post">
-    <el-container>
-      <el-main>
-        <!-- 顶部导航 -->
-        <ul class="nav-share" v-show="false">
-          <li class="nav-share-item"><a href="javascript:;">全部</a></li>
-          <li class="nav-share-item"><a href="javascript:;">站内公告</a></li>
-          <li class="nav-share-item"><a href="javascript:;">笔经面经</a></li>
-          <li class="nav-share-item"><a href="javascript:;">我要提问</a></li>
-          <li class="nav-share-item"><a href="javascript:;">技术交流</a></li>
-          <li class="nav-share-item"><a href="javascript:;">产品运营</a></li>
-          <li class="nav-share-item"><a href="javascript:;">留学生</a></li>
-          <li class="nav-share-item"><a href="javascript:;">职业发展</a></li>
-          <li class="nav-share-item"><a href="javascript:;">招聘信息</a></li>
-          <li class="nav-share-item"><a href="javascript:;">资源分享</a></li>
-          <li class="nav-share-item"><a href="javascript:;">猿生活</a></li>
-        </ul>
-        <!-- 标签页 -->
-        <el-card class="nav-pane">
-          <el-tabs>
-            <el-tab-pane label="最新回复"></el-tab-pane>
-            <el-tab-pane label="最新发表"></el-tab-pane>
-            <el-tab-pane label="最热"></el-tab-pane>
-            <el-tab-pane label="精华"> </el-tab-pane>
-          </el-tabs>
-          <el-button
-            type="danger"
-            class="addpost"
-            size="mini"
-            plain
-            @click="goPostSubmit()"
-            ><i class="el-icon-edit-outline"></i>我要发布</el-button
+    <el-card class="nav-pane">
+      <!-- <el-main> -->
+      <!-- 顶部导航 -->
+      <ul class="nav-share" v-show="false">
+        <li class="nav-share-item"><a href="javascript:;">全部</a></li>
+        <li class="nav-share-item"><a href="javascript:;">站内公告</a></li>
+        <li class="nav-share-item"><a href="javascript:;">笔经面经</a></li>
+        <li class="nav-share-item"><a href="javascript:;">我要提问</a></li>
+        <li class="nav-share-item"><a href="javascript:;">技术交流</a></li>
+        <li class="nav-share-item"><a href="javascript:;">产品运营</a></li>
+        <li class="nav-share-item"><a href="javascript:;">留学生</a></li>
+        <li class="nav-share-item"><a href="javascript:;">职业发展</a></li>
+        <li class="nav-share-item"><a href="javascript:;">招聘信息</a></li>
+        <li class="nav-share-item"><a href="javascript:;">资源分享</a></li>
+        <li class="nav-share-item"><a href="javascript:;">猿生活</a></li>
+      </ul>
+      <!-- 标签页 -->
+      <el-tabs>
+        <el-tab-pane label="最新回复"></el-tab-pane>
+        <el-tab-pane label="最新发表"></el-tab-pane>
+        <el-tab-pane label="最热"></el-tab-pane>
+        <el-tab-pane label="精华"> </el-tab-pane>
+      </el-tabs>
+      <el-button
+        type="danger"
+        class="addpost"
+        size="mini"
+        plain
+        @click="goPostSubmit()"
+        ><i class="el-icon-edit-outline"></i>我要发布</el-button
+      >
+      <ul>
+        <li class="postdesc" v-for="item in postList" :key="item.id">
+          <a @click="goPostById(item)" href="javascript:;"
+            ><h3>{{ item.title }}</h3></a
           >
-          <ul>
-            <li class="postdesc" v-for="item in postList" :key="item.id">
-              <a @click="goPostById(item)" href="javascript:;"
-                ><h3>{{ item.title }}</h3></a
-              >
-              <p>
-                <span class="author"
-                  ><i class="iconfont icon-user"></i>{{ item.author }}</span
-                >
-                <span class="createDate"
-                  ><em>{{ item.createTime | formatDate }}</em
-                  >发表</span
-                >
-                <span class="replyDate"
-                  >最后回复时间: <em>{{ item.lastReplyTime | formatDate }}</em>
-                </span>
-              </p>
-              <p class="icons">
-                <i class="el-icon-chat-dot-round">2</i>
-                <i class="icon-dianzan iconfont">2</i>
-                <i class="el-icon-view">123</i>
-              </p>
-            </li>
-          </ul>
-          <!-- 分页 -->
-          <el-pagination
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="query.size"
-            @current-change="handleCurrent"
-            v-if="total"
-          >
-          </el-pagination>
-        </el-card>
-      </el-main>
-    </el-container>
+          <p>
+            <span class="author"
+              ><i class="iconfont icon-user"></i>{{ item.author }}</span
+            >
+            <span class="createDate"
+              ><em>{{ item.createTime | formatDate }}</em
+              >发表</span
+            >
+            <span class="replyDate"
+              >最后回复时间: <em>{{ item.lastReplyTime | formatDate }}</em>
+            </span>
+          </p>
+          <p class="icons">
+            <i class="el-icon-chat-dot-round">2</i>
+            <i class="icon-dianzan iconfont">2</i>
+            <i class="el-icon-view">123</i>
+          </p>
+        </li>
+      </ul>
+      <!-- 分页 -->
+      <el-pagination
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="query.size"
+        @current-change="handleCurrent"
+        v-if="total"
+      >
+      </el-pagination>
+    </el-card>
   </div>
 </template>
 

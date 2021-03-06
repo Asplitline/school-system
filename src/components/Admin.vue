@@ -13,13 +13,11 @@
             <el-menu-item
               ><img src="../assets/logo.png" alt="" class="logo"
             /></el-menu-item>
-            <el-menu-item class="logo-title"
-              >成都东软学院图书借阅系统 - 后台</el-menu-item
-            >
+            <el-menu-item class="logo-title">校友服务平台 - 后台</el-menu-item>
             <el-submenu class="user-info" index="1" v-if="currentUser">
               <template slot="title">
-                <img :src="bindURL(currentUser.imgUrl)" class="avatar" />
-                <span>{{ currentUser.username }}</span>
+                <img :src="bindURL(currentUser.avatarImgUrl)" class="avatar" />
+                <span>{{ currentUser.name }}</span>
               </template>
               <el-menu-item @click="logout"
                 ><i class="icon-export iconfont"></i>退出系统</el-menu-item
@@ -70,7 +68,6 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-
         <el-container>
           <el-main>
             <router-view></router-view>
@@ -99,7 +96,7 @@ export default {
     },
     // 登出
     logout() {
-      this.$router.push('/')
+      this.$router.push('/login')
       sessionStorage.clear()
     }
   },

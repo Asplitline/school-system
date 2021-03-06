@@ -42,7 +42,7 @@
           <el-tag v-else>已回复</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="200">
+      <el-table-column label="操作" min-width="150">
         <template v-slot="{ row }">
           <el-tooltip
             class="item"
@@ -55,7 +55,7 @@
               type="warning"
               icon="el-icon-tickets"
               size="small"
-              @click="showAdviceDetailDialog()"
+              @click="showAdviceDetailDialog(row)"
             ></el-button>
           </el-tooltip>
           <el-tooltip
@@ -69,7 +69,7 @@
               type="primary"
               icon="el-icon-edit"
               size="small"
-              @click="showAdviceReplyDialog()"
+              @click="showAdviceReplyDialog(row)"
             ></el-button>
           </el-tooltip>
           <el-tooltip
@@ -100,27 +100,27 @@
       :total="total"
     ></el-pagination>
     <!-- 投诉回复对话框 -->
-    <el-dialog :visible.sync="isSuggestReplyDialog" width="30%">
+    <el-dialog :visible.sync="isAdviceReplyDialog" width="30%">
       <div class="content">
         <p>
-          投诉标题:<span>{{ suggestForm.title }}</span>
+          投诉标题:<span>{{ adviceForm.title }}</span>
         </p>
         <p>
-          投诉内容:<span class="mark">{{ suggestForm.description }}</span>
+          投诉内容:<span class="mark">{{ adviceForm.description }}</span>
         </p>
         <p>
-          投诉时间:<span>{{ suggestForm.createTime | formatDate }}</span>
+          投诉时间:<span>{{ adviceForm.createTime | formatDate }}</span>
         </p>
         <p>
           投诉状态:<span>{{
-            suggestForm.state === 0 ? '未回复' : '已回复'
+            adviceForm.state === 0 ? '未回复' : '已回复'
           }}</span>
         </p>
         <p class="breif">
           投诉图片:
           <span>
             <img
-              :src="bindURL(suggestForm.imageUrl)"
+              :src="bindImg(adviceForm.url)"
               alt=""
               width="100"
               height="100"
@@ -130,7 +130,7 @@
         <p>
           回复投诉：
           <el-input
-            v-model="suggestForm.content"
+            v-model="adviceForm.content"
             type="textarea"
             resize="none"
             :autosize="{ minRows: 2, maxRows: 4 }"
@@ -139,36 +139,36 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="isSuggestReplyDialog = false" size="mini"
+        <el-button @click="isAdviceReplyDialog = false" size="mini"
           >取 消</el-button
         >
-        <el-button type="primary" @click="replySuggest()" size="mini"
+        <el-button type="primary" @click="submitAdviceReply()" size="mini"
           >回 复</el-button
         >
       </span>
     </el-dialog>
     <!-- 投诉详情对话框 -->
-    <el-dialog :visible.sync="isSuggestDetailDialog" width="30%">
+    <el-dialog :visible.sync="isAdviceDetailDialog" width="30%">
       <div class="content">
         <p>
-          投诉标题:<span>{{ suggestForm.title }}</span>
+          投诉标题:<span>{{ adviceForm.title }}</span>
         </p>
         <p>
-          投诉内容:<span class="mark">{{ suggestForm.description }}</span>
+          投诉内容:<span class="mark">{{ adviceForm.description }}</span>
         </p>
         <p>
-          投诉时间:<span>{{ suggestForm.createTime | formatDate }}</span>
+          投诉时间:<span>{{ adviceForm.createTime | formatDate }}</span>
         </p>
         <p>
           投诉状态:<span>{{
-            suggestForm.state === 0 ? '未回复' : '已回复'
+            adviceForm.state === 0 ? '未回复' : '已回复'
           }}</span>
         </p>
         <p class="brief">
           投诉图片:
           <span>
             <img
-              :src="bindURL(suggestForm.imageUrl)"
+              :src="bindImg(adviceForm.url)"
               alt=""
               width="100"
               height="100"
@@ -177,14 +177,14 @@
         </p>
         <p>
           投诉回复:<span class="mark">{{
-            suggestForm.content || '暂未回复'
+            adviceForm.content || '暂未回复'
           }}</span>
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button
           type="primary"
-          @click="isSuggestDetailDialog = false"
+          @click="isAdviceDetailDialog = false"
           size="mini"
           >关 闭</el-button
         >
@@ -194,8 +194,8 @@
 </template>
 
 <script>
-import { getAdviceList, deleteAdvice, getUser } from '@api'
-import { bindURL, findUserById } from '@/plugins/function'
+import { getAdviceList, deleteAdvice, getUser, editAdvice } from '@api'
+import { bindImg, findUserById, convertDeepCopy } from '@/plugins/function'
 export default {
   data() {
     return {
@@ -207,13 +207,13 @@ export default {
         keyword: null
       },
       total: 10,
-      isSuggestReplyDialog: false,
-      isSuggestDetailDialog: false,
-      suggestForm: {}
+      isAdviceReplyDialog: false,
+      isAdviceDetailDialog: false,
+      adviceForm: {}
     }
   },
   methods: {
-    bindURL,
+    bindImg,
     // 获取投诉表单
     async getAdvice() {
       const { total, list } = await getAdviceList(this.query)
@@ -225,12 +225,30 @@ export default {
       this.total = total
     },
     // 显示详情对话框
-    showAdviceDetailDialog() {
-      this.isSuggestDetailDialog = true
+    showAdviceDetailDialog(row) {
+      this.adviceForm = convertDeepCopy(row)
+      this.isAdviceDetailDialog = true
     },
     // 显示回复对话框
-    showAdviceReplyDialog() {
-      this.isSuggestReplyDialog = true
+    showAdviceReplyDialog(row) {
+      this.adviceForm = convertDeepCopy(row)
+      this.isAdviceReplyDialog = true
+    },
+    // 投诉回复
+    async submitAdviceReply() {
+      if (this.adviceForm.content.trim().length === 0) {
+        this.$message.error('请输入你的回复')
+        return
+      }
+      this.adviceForm.state = 1
+      const { success } = await editAdvice(this.adviceForm)
+      if (success === true) {
+        this.isAdviceReplyDialog = false
+        this.getAdvice()
+        this.$message.success('投诉审核成功')
+      } else {
+        this.$message.error('投诉审核失败')
+      }
     },
     // 通过id删除建议
     deleteAdviceById(id) {

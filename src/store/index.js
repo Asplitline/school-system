@@ -8,7 +8,8 @@ export default new Vuex.Store({
     user: JSON.parse(sessionStorage.getItem('userInfo')),
     currentNews: JSON.parse(sessionStorage.getItem('currentNews')),
     currentPost: JSON.parse(sessionStorage.getItem('currentPost')),
-    loginStatus: sessionStorage.getItem('loginStatus') === 'true'
+    loginStatus: sessionStorage.getItem('loginStatus') === 'true',
+    menuIndex: sessionStorage.getItem('menuIndex')
   },
   mutations: {
     initUser (state, data) {
@@ -26,6 +27,10 @@ export default new Vuex.Store({
     initLoginStatus (state, data) {
       sessionStorage.setItem('loginStatus', data === true)
       state.loginStatus = data === true
+    },
+    initMenuIndex (state, data) {
+      sessionStorage.setItem('menuIndex', data)
+      state.menuIndex = data
     }
   },
   actions: {

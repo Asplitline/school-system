@@ -34,12 +34,12 @@
       </el-table-column>
       <el-table-column prop="author" label="发布者" min-width="80">
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" min-width="100">
+      <el-table-column prop="createTime" label="创建时间" min-width="120">
         <template v-slot="{ row }">
           {{ row.createTime | formatDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="编辑时间" min-width="100">
+      <el-table-column prop="updateTime" label="编辑时间" min-width="120">
         <template v-slot="{ row }">
           {{ row.updateTime | formatDate }}
         </template>
@@ -47,7 +47,7 @@
       <el-table-column
         prop="lastReplyTime"
         label="最有一次回复时间"
-        min-width="100"
+        min-width="120"
       >
         <template v-slot="{ row }">
           {{ row.lastReplyTime | formatDate }}

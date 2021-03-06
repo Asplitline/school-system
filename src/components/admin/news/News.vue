@@ -128,7 +128,7 @@
           新闻封面:
           <span>
             <img
-              :src="bindURL(currentForm.url)"
+              :src="bindImg(currentForm.url)"
               alt=""
               width="100"
               height="100"
@@ -138,7 +138,12 @@
         <p>
           新闻标题:<span>{{ currentForm.title }}</span>
         </p>
-        <p>新闻内容:<span class="mark" v-html="currentForm.content"></span></p>
+        <p>
+          新闻内容:<span
+            class="mark news-html"
+            v-html="currentForm.content"
+          ></span>
+        </p>
         <p>
           新闻时间:<span>{{ currentForm.createTime | formatDate }}</span>
         </p>
@@ -314,6 +319,12 @@ export default {
   }
   .mark {
     background-color: #f3f3f3;
+  }
+}
+
+.news-html {
+  /deep/p img {
+    width: 100%;
   }
 }
 </style>

@@ -184,10 +184,15 @@ export default {
   }
 }
 
-.el-form /deep/ .el-upload {
-  height: 200px;
-  width: 200px;
-  left: 50%;
-  transform: translateX(-50%);
+.el-form {
+  /deep/ .el-upload {
+    height: 200px;
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  /deep/ .el-form-item__content {
+    line-height: 0;
+  }
 }
 </style>

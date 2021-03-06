@@ -4,7 +4,7 @@
       <div class="card-row">
         <el-card
           class="card-content"
-          v-for="item in newsList"
+          v-for="item in filterNews"
           :key="item.id"
           body-style="padding: 0"
           shadow="hover"
@@ -93,7 +93,14 @@ export default {
     }
   },
   computed: {
-    currentSize() {}
+    filterNews() {
+      return this.newsList.filter((item) => {
+        return item.state === 1
+      })
+    },
+    currentSize() {
+      return (4 - (this.filterNews.length / 4) * 4) % 4
+    }
   },
   created() {
     this.getNews()
@@ -116,22 +123,19 @@ export default {
     .card-content {
       position: relative;
       width: 260px;
-      height: 260px;
+      height: 252px;
       margin-bottom: 20px;
       border-radius: 8px;
-
       i {
         margin-right: 8px;
-      }
-      .card-title,
-      .card-author {
-        margin-left: 10px;
       }
     }
     .card-pic {
       display: inline-block;
       width: 100%;
       height: 140px;
+      border-top: 1px solid #cccccc30;
+      border-bottom: 1px solid #cccccc30;
       overflow: hidden;
       img {
         width: 100%;
@@ -146,9 +150,19 @@ export default {
         transform: scale(1.05);
       }
     }
+    .author {
+      float: right;
+      font-size: 13px;
+      margin-right: 10px;
+    }
     .card-title {
-      font-size: 20px;
-      font-weight: 600;
+      padding: 10px;
+      text-align: left;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 16px;
     }
     .card-detail {
       position: absolute;
@@ -165,5 +179,9 @@ export default {
       box-sizing: border-box;
     }
   }
+}
+
+.hidden {
+  visibility: hidden;
 }
 </style>

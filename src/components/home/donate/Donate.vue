@@ -49,8 +49,11 @@
           </el-table-column>
           <el-table-column prop="state" label="捐赠状态" min-width="100">
             <template v-slot="{ row }">
-              <el-tag v-if="row.state === 0" type="danger">审核中</el-tag>
-              <el-tag v-else>已通过</el-tag>
+              <el-tag v-if="row.state === 0" type="warning">审核中 </el-tag>
+              <el-tag v-else-if="row.state === 1" type="danger">已拒绝 </el-tag>
+              <el-tag v-else-if="row.state === 2" type="success"
+                >已通过
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" min-width="100">
@@ -100,7 +103,12 @@
           </el-form-item>
           <el-form-item label="所在班级" prop="classes">
             <el-select v-model="donateForm.classes" placeholder="请选择班级">
-              <el-option :label="item" :value="item" v-for="item in options">
+              <el-option
+                :label="item"
+                :value="item"
+                v-for="(item, index) in options"
+                :key="index"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -121,15 +129,13 @@
       <el-dialog :visible.sync="isDonateDetailDialog" width="30%">
         <div class="content">
           <p>
-            捐赠人:<span>{{ donateDetailForm.name }}</span>
+            捐赠人:<span class="mark">{{ donateDetailForm.name }}</span>
           </p>
           <p>
             捐赠人班级:<span>{{ donateDetailForm.classes }}</span>
           </p>
           <p>
-            捐赠描述:<span class="mark">{{
-              donateDetailForm.description
-            }}</span>
+            捐赠描述:<span>{{ donateDetailForm.description }}</span>
           </p>
           <p>
             捐赠内容:<span class="mark">{{ donateDetailForm.comment }}</span>
@@ -138,8 +144,8 @@
             捐赠时间:<span>{{ donateDetailForm.createTime | formatDate }}</span>
           </p>
           <p>
-            捐赠状态:<span>{{
-              donateDetailForm.state === 0 ? '审核中' : '已同意'
+            捐赠状态:<span class="mark">{{
+              ['审核中', '已拒绝', '已同意'][donateDetailForm.state]
             }}</span>
           </p>
         </div>
@@ -210,6 +216,10 @@ export default {
     },
     // 显示捐赠对话框
     showDonateDialog() {
+      if (this.loginStatus === false) {
+        this.$message.error('请先登录')
+        return
+      }
       this.isDonateDialog = true
       this.donateForm.name = this.user.name
       this.donateForm.userid = this.user.id
@@ -238,6 +248,7 @@ export default {
         if (success === true) {
           this.$message.success('提交成功，等待审核')
           this.isDonateDialog = false
+          this.getDonate()
         } else {
           this.$message.error('捐赠失败')
         }
@@ -249,7 +260,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user', 'loginStatus'])
   },
   created() {
     this.getDonate()

@@ -35,7 +35,7 @@ export function _postOld (url) {
         }).catch((err) => { console.log(err) })
     }
 }
-// put 
+// put
 export function _put (url) {
     return function (params) {
         return $http.put(url, params)
@@ -53,7 +53,7 @@ export function _delete (url) {
             .then(res => {
                 return res.data
             }).catch(err => {
-                console.log(err);
+                console.log(err)
             })
     }
 }
@@ -64,7 +64,7 @@ export function _deleteOld (url) {
             .then(res => {
                 return res.data
             }).catch(err => {
-                console.log(err);
+                console.log(err)
             })
     }
 }

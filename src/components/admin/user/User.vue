@@ -157,14 +157,14 @@
           <span slot="label"><i class="icon-camera1 iconfont"></i>头像</span>
           <el-upload
             class="avatar-uploader"
-            :action="bindImg('/uploadfile')"
+            :action="bindURL('/uploadfile')"
             :show-file-list="false"
             :on-success="handleAddAvatarSuccess"
             name="files"
           >
             <img
-              v-if="addUserForm.imgUrl"
-              :src="bindURL(addUserForm.imgUrl)"
+              v-if="addUserForm.avatarImgUrl"
+              :src="bindURL(addUserForm.avatarImgUrl)"
               class="avatar"
               ref="preview"
             />
@@ -242,7 +242,7 @@
           >
             <img
               v-if="editUserForm.avatarImgUrl"
-              :src="bindURL(editUserForm.avatarImgUrl)"
+              :src="bindImg(editUserForm.avatarImgUrl)"
               class="avatar"
               ref="preview"
             />
@@ -406,6 +406,7 @@ export default {
       switch (formName) {
         case 'addUserForm':
           this.addUserForm.id = Date.now() % 9999999
+          this.addUserForm.state = 0
           this.handleUserForm(formName, this.addUserForm, ADD)
           break
         case 'editUserForm':

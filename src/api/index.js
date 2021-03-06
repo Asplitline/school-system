@@ -16,6 +16,7 @@ const deleteAdvice = _deleteOld('/addvice/delete')
 // --donate
 const getDonateList = _get('/donate/pageDonate')
 const addDonate = _post('/donate/insert')
+const editDonate = _put('/donate/updateIgnoreNull')
 const deleteDonate = _deleteOld('/donate/delete')
 // --news
 const getNewsList = _get('/news/pageNews')
@@ -25,6 +26,7 @@ const editNews = _put('/news/updateIgnoreNull')
 // --post
 const getPost = _get('/post/getAllPosts')
 const getPostList = _get('/post/api/pagePosts')
+const getPostByAuthor = _get('/post/api/pagePostByAuthorId')
 const addPost = _post('/post/api/addPost')
 const deletePost = _delete('/post/api/deletePost')
 // --comment
@@ -60,6 +62,7 @@ export {
     getDonateList,
     deleteDonate,
     addDonate,
+    editDonate,
     // news
     getNewsList,
     deleteNews,
@@ -68,6 +71,7 @@ export {
     // post
     getPost,
     getPostList,
+    getPostByAuthor,
     addPost,
     deletePost,
     // comment
